@@ -3,178 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafoglio Personale Directa</title>
+    <title>Dashboard Admin Portafoglio Directa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen p-4 md:p-8">
-    <div class="max-w-7xl mx-auto space-y-6">
+<body class="bg-slate-100 text-slate-700 font-sans min-h-screen flex">
+
+    <!-- SIDEBAR SINISTRA DENSE NAV (Ispirata al Template) -->
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col min-h-screen shrink-0 hidden md:flex">
+        <!-- Logo Brand -->
+        <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-blue-600 text-white p-2 rounded-xl flex items-center justify-center font-black">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+            </div>
+            <span class="text-xl font-bold text-white tracking-wide">PORTAFOGLIO</span>
+        </div>
+
+        <!-- Menu Navigazione -->
+        <nav class="flex-1 p-4 space-y-1 text-sm font-semibold">
+            <a href="#dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+                <i class="fa-solid fa-border-all w-5"></i> Dashboard
+            </a>
+            <a href="#obbligazioni" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-building-columns w-5 text-emerald-400"></i> Obbligazioni
+            </a>
+            <a href="#pac" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-pie-chart w-5 text-amber-400"></i> PAC Macro Aree
+            </a>
+            <a href="#cedole" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-hand-holding-dollar w-5 text-sky-400"></i> Cedole & Tassazione
+            </a>
+        </nav>
+
+        <!-- Profile Footer -->
+        <div class="p-4 border-t border-slate-800 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold">
+                EC
+            </div>
+            <div class="text-xs">
+                <p class="font-bold text-white">Enrico Costanzo</p>
+                <p class="text-slate-400">Conto Directa E0737</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="flex-1 flex flex-col min-w-0">
         
-        <!-- HEADER PATRIMONIO -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-            <div>
-                <h1 class="text-3xl font-black text-white tracking-tight">PORTAFOGLIO TITOLI DIRECTA</h1>
-                <p class="text-sm text-slate-400 mt-1">Panoramica Posizioni, Scadenze Obbligazionarie e PAC</p>
+        <!-- HEADER TOP BAR -->
+        <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-600 text-xl"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="text-xl font-bold text-slate-800">Panoramica Asset & Allocazione PAC</h2>
             </div>
-            <div class="mt-4 md:mt-0 flex flex-wrap gap-4">
-                <div class="bg-slate-900 border border-slate-700 px-5 py-3 rounded-xl">
-                    <span class="text-xs text-slate-400 uppercase font-bold block">Patrimonio Totale Titoli</span>
-                    <span class="text-2xl font-black text-emerald-400" id="kpi-patrimonio">€ 220.241,49</span>
-                </div>
-                <div class="bg-slate-900 border border-slate-700 px-5 py-3 rounded-xl">
-                    <span class="text-xs text-slate-400 uppercase font-bold block">Cedole Annue Stimate</span>
-                    <span class="text-2xl font-black text-amber-400" id="kpi-cedole">€ 4.850,00</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- MACRO AREE PAC & SCADENZE OBBLIGAZIONI -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Grafico Macro Aree Asset Allocation -->
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-emerald-400"></i> Asset Allocation & Macro Aree PAC
-                </h3>
-                <div class="h-64 flex justify-center">
-                    <canvas id="macroChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Scadenzario Obbligazioni -->
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-calendar-days text-blue-400"></i> Scadenzario Obbligazioni (Anni)
-                </h3>
-                <div class="h-64 flex justify-center">
-                    <canvas id="maturityChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- TABELLA TITOLI IN PORTAFOGLIO -->
-        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-            <h3 class="text-lg font-bold text-white mb-4 flex items-center justify-between">
-                <span class="flex items-center gap-2">
-                    <i class="fa-solid fa-layer-group text-sky-400"></i> Elenco Titoli in Portafoglio
+            <div class="flex items-center gap-4">
+                <span class="bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-200">
+                    <i class="fa-regular fa-clock text-slate-400 mr-1"></i> 08 Settembre 2026
                 </span>
-                <span class="text-xs bg-slate-700 text-slate-300 px-3 py-1 rounded-full">Aggiornato da Directa</span>
-            </h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr class="border-b border-slate-700 bg-slate-900/60 text-xs font-semibold text-slate-400 uppercase">
-                            <th class="p-3">Categoria</th>
-                            <th class="p-3">ISIN / Titolo</th>
-                            <th class="p-3 text-right">Scadenza</th>
-                            <th class="p-3 text-right">Quantità</th>
-                            <th class="p-3 text-right">PMC / Investito</th>
-                            <th class="p-3 text-right">Flusso / Cedola</th>
-                        </tr>
-                    </thead>
-                    <tbody id="assets-table" class="divide-y divide-slate-700/50">
-                        <!-- Popolato via JavaScript -->
-                    </tbody>
-                </table>
             </div>
-        </div>
+        </header>
 
-        <!-- RIEPILOGO CEDOLE E TASSI D'IMPOSTA -->
-        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-receipt text-amber-400"></i> Calcolo Tassazione & Cedole Incassate
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                    <span class="text-xs text-slate-400 uppercase block font-semibold">Cedole Lorde Totali</span>
-                    <span class="text-xl font-bold text-emerald-400">€ 5.542,88</span>
+        <!-- BODY DASHBOARD -->
+        <div class="p-6 md:p-8 space-y-6 overflow-y-auto">
+
+            <!-- ROW 1: 4 TOP KPI CARDS (Layout identico allo screenshot) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Card 1: Patrimonio Totale -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Patrimonio Totale</span>
+                            <h3 class="text-2xl font-black text-slate-800 mt-1">€ 220.241,49</h3>
+                        </div>
+                        <span class="p-2 bg-blue-50 text-blue-600 rounded-xl text-lg"><i class="fa-solid fa-wallet"></i></span>
+                    </div>
+                    <div class="mt-4 flex items-center text-xs font-semibold text-emerald-600 gap-1">
+                        <i class="fa-solid fa-arrow-trend-up"></i> <span>+2.4%</span> <span class="text-slate-400 font-normal">rispetto al mese scorso</span>
+                    </div>
                 </div>
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                    <span class="text-xs text-slate-400 uppercase block font-semibold">Ritenuta Fiscale Paga (12.5% / 26%)</span>
-                    <span class="text-xl font-bold text-rose-400">- € 692,88</span>
+
+                <!-- Card 2: Totale Obbligazioni -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Obbligazioni Singole</span>
+                            <h3 class="text-2xl font-black text-slate-800 mt-1">€ 189.699,00</h3>
+                        </div>
+                        <span class="p-2 bg-emerald-50 text-emerald-600 rounded-xl text-lg"><i class="fa-solid fa-building-columns"></i></span>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500 font-medium">
+                        Quota Portafoglio: <strong class="text-slate-700">86.1%</strong>
+                    </div>
                 </div>
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                    <span class="text-xs text-slate-400 uppercase block font-semibold">Cedole Nette Incassate</span>
-                    <span class="text-xl font-bold text-sky-400">€ 4.850,00</span>
+
+                <!-- Card 3: Totale PAC -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PAC Accumulo</span>
+                            <h3 class="text-2xl font-black text-slate-800 mt-1">€ 30.542,49</h3>
+                        </div>
+                        <span class="p-2 bg-amber-50 text-amber-600 rounded-xl text-lg"><i class="fa-solid fa-chart-line"></i></span>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500 font-medium">
+                        Quota Portafoglio: <strong class="text-slate-700">13.9%</strong>
+                    </div>
+                </div>
+
+                <!-- Card 4: Cedole Nette Annue -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Cedole Nette Annue</span>
+                            <h3 class="text-2xl font-black text-slate-800 mt-1">€ 4.850,00</h3>
+                        </div>
+                        <span class="p-2 bg-purple-50 text-purple-600 rounded-xl text-lg"><i class="fa-solid fa-receipt"></i></span>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500 font-medium">
+                        Rendimento Netto Medio: <strong class="text-slate-700">2.55%</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ROW 2: GRAFICO PRINCIPALE & RANKING MACRO AREE PAC -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- GRAFICO PAC PER MACRO AREE (2 Colonne) -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">Composizione PAC per Macro Aree</h3>
+                            <p class="text-xs text-slate-400">Suddivisione strategica degli ETF in accumulo</p>
+                        </div>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-lg font-semibold">Attivo</span>
+                    </div>
+                    <div class="h-72 w-full">
+                        <canvas id="pacMacroChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- RANKING MACRO AREE PAC (1 Colonna) -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Macro Aree PAC</h3>
+                        <div class="space-y-4">
+                            
+                            <!-- Area 1: Azionario Globale -->
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">1</span>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800">Azionario Globale</p>
+                                        <p class="text-xs text-slate-400">MSCI World / LifeStrat 60</p>
+                                    </div>
+                                </div>
+                                <span class="font-bold text-slate-700 text-sm">€ 12.450</span>
+                            </div>
+
+                            <!-- Area 2: Obbligazionario ETF -->
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">2</span>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800">Obbligazionario ETF</p>
+                                        <p class="text-xs text-slate-400">Corp Bond & Global Agg</p>
+                                    </div>
+                                </div>
+                                <span class="font-bold text-slate-700 text-sm">€ 8.210</span>
+                            </div>
+
+                            <!-- Area 3: Azionario Settoriale & Emergenti -->
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs">3</span>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800">Settoriali & Emergenti</p>
+                                        <p class="text-xs text-slate-400">Defense, Health, Emerging</p>
+                                    </div>
+                                </div>
+                                <span class="font-bold text-slate-700 text-sm">€ 5.882</span>
+                            </div>
+
+                            <!-- Area 4: Gold & Commodities -->
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs">4</span>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800">Gold & Materie Prime</p>
+                                        <p class="text-xs text-slate-400">WisdomTree Physical Gold</p>
+                                    </div>
+                                </div>
+                                <span class="font-bold text-slate-700 text-sm">€ 4.000</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ROW 3: SCADENZARIO OBBLIGAZIONI SINGOLE -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-building-columns text-emerald-600"></i> Portafoglio Obbligazioni Singole (Dettaglio Scadenze)
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-500 uppercase">
+                                <th class="p-3">Emittente / Titolo</th>
+                                <th class="p-3">ISIN</th>
+                                <th class="p-3 text-center">Anno Scadenza</th>
+                                <th class="p-3 text-right">Nominale</th>
+                                <th class="p-3 text-right">Investito (€)</th>
+                                <th class="p-3 text-right">Cedola Annua</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">BTP 4% Febbraio 2037</td>
+                                <td class="p-3 font-mono text-xs text-slate-500">IT0003934657</td>
+                                <td class="p-3 text-center font-bold text-blue-600">2037</td>
+                                <td class="p-3 text-right font-mono">29.000</td>
+                                <td class="p-3 text-right font-bold text-slate-800">€ 28.905,00</td>
+                                <td class="p-3 text-right text-emerald-600 font-bold">4.00%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">BTP 3.45% Marzo 2048</td>
+                                <td class="p-3 font-mono text-xs text-slate-500">IT0005273013</td>
+                                <td class="p-3 text-center font-bold text-blue-600">2048</td>
+                                <td class="p-3 text-right font-mono">30.000</td>
+                                <td class="p-3 text-right font-bold text-slate-800">€ 26.116,00</td>
+                                <td class="p-3 text-right text-emerald-600 font-bold">3.45%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">BEI GREEN 2.625% Settembre 2034</td>
+                                <td class="p-3 font-mono text-xs text-slate-500">EU000A3L2773</td>
+                                <td class="p-3 text-center font-bold text-blue-600">2034</td>
+                                <td class="p-3 text-right font-mono">20.000</td>
+                                <td class="p-3 text-right font-bold text-slate-800">€ 19.774,00</td>
+                                <td class="p-3 text-right text-emerald-600 font-bold">2.625%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">Alperia Green 4.75% Giugno 2029</td>
+                                <td class="p-3 font-mono text-xs text-slate-500">IT0005595373</td>
+                                <td class="p-3 text-center font-bold text-blue-600">2029</td>
+                                <td class="p-3 text-right font-mono">17.000</td>
+                                <td class="p-3 text-right font-bold text-slate-800">€ 17.000,00</td>
+                                <td class="p-3 text-right text-emerald-600 font-bold">4.75%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">New Princes 4.75% Febbraio 2031</td>
+                                <td class="p-3 font-mono text-xs text-slate-500">XS2958536976</td>
+                                <td class="p-3 text-center font-bold text-blue-600">2031</td>
+                                <td class="p-3 text-right font-mono">10.000</td>
+                                <td class="p-3 text-right font-bold text-slate-800">€ 10.000,00</td>
+                                <td class="p-3 text-right text-emerald-600 font-bold">4.75%</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
+    </main>
 
     <script>
-        // Elenco Titoli Ricostruito dal Portafoglio
-        const portfolioAssets = [
-            { category: 'Obbligazioni Stato', isin: 'IT0003934657', name: 'BTP-1FB37 4%', maturity: '2037', qty: '29.000', invested: '€ 28.905,00', coupon: '4,00%' },
-            { category: 'Obbligazioni Stato', isin: 'IT0005273013', name: 'BTP TF 3,45% MZ48 EUR', maturity: '2048', qty: '30.000', invested: '€ 26.116,00', coupon: '3,45%' },
-            { category: 'Obbligazioni Stato', isin: 'EU000A3L2773', name: 'BEI GREEN FX 2.625% SEP34', maturity: '2034', qty: '20.000', invested: '€ 19.774,00', coupon: '2,625%' },
-            { category: 'Obbligazioni Corp/Green', isin: 'IT0005595373', name: 'ALPERIA GREEN FX 4.75% JUN29', maturity: '2029', qty: '17.000', invested: '€ 17.000,00', coupon: '4,75%' },
-            { category: 'Obbligazioni Corp/Green', isin: 'XS2958536976', name: 'NEWPRINCES FX 4.75% FEB31', maturity: '2031', qty: '10.000', invested: '€ 10.000,00', coupon: '4,75%' },
-            { category: 'Obbligazioni Corp/Green', isin: 'XS2932806065', name: 'ALERIONCLEAN GREEN FX 4.75%', maturity: '2030', qty: '10.000', invested: '€ 10.000,00', coupon: '4,75%' },
-            { category: 'Obbligazioni Stato', isin: 'XS2626024868', name: 'EIB TF 2,75% LG30 EUR', maturity: '2030', qty: '10.000', invested: '€ 9.951,00', coupon: '2,75%' },
-            { category: 'Obbligazioni Banca', isin: 'IT0005571051', name: 'UNICREDIT BANCA 23/36 OC', maturity: '2036', qty: '10.000', invested: '€ 10.000,00', coupon: 'Variabile' },
-            { category: 'Obbligazioni Stato', isin: 'FR001400WYO4', name: 'OAT FX 3.6% MAY42 EUR', maturity: '2042', qty: '9.992', invested: '€ 9.471,42', coupon: '3,60%' },
-            { category: 'PAC Azionario Globale', isin: 'IE00B4L5Y983', name: 'ISHARES CORE MSCI WORLD UCITS', maturity: 'Etf', qty: '4', invested: 'PAC Attivo', coupon: 'Accumulo' },
-            { category: 'PAC Emergenti', isin: 'LU1681045370', name: 'Amundi MSCI Emerging Markets', maturity: 'Etf', qty: '254', invested: '€ 1.514,43', coupon: 'Accumulo' },
-            { category: 'PAC Healthcare', isin: 'IE00BYZK4776', name: 'ISHARES HEALTHCARE INNOVATION', maturity: 'Etf', qty: '156', invested: '€ 1.144,10', coupon: 'Accumulo' },
-            { category: 'PAC Defense', isin: 'IE000YYE6WK5', name: 'VanEck Defense UCITS ETF', maturity: 'Etf', qty: '15', invested: '€ 820,45', coupon: 'Accumulo' },
-            { category: 'PAC Oro / Materie Prime', isin: 'JE00B8DFY052', name: 'WISDOMTREE PHYSICAL GOLD', maturity: 'Etc', qty: '22', invested: 'PAC Attivo', coupon: 'N/A' }
-        ];
-
+        // Render Grafico PAC Macro Aree (Stile Admin Template)
         window.addEventListener('DOMContentLoaded', () => {
-            renderAssetsTable();
-            renderCharts();
-        });
-
-        function renderAssetsTable() {
-            const tbody = document.getElementById('assets-table');
-            tbody.innerHTML = portfolioAssets.map(a => `
-                <tr class="hover:bg-slate-700/30">
-                    <td class="p-3"><span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-md">${a.category}</span></td>
-                    <td class="p-3 font-medium text-white">${a.name}<br><span class="text-xs text-slate-400 font-mono">${a.isin}</span></td>
-                    <td class="p-3 text-right font-mono text-slate-300">${a.maturity}</td>
-                    <td class="p-3 text-right font-mono text-white font-bold">${a.qty}</td>
-                    <td class="p-3 text-right font-mono text-slate-200">${a.invested}</td>
-                    <td class="p-3 text-right font-mono font-bold text-emerald-400">${a.coupon}</td>
-                </tr>
-            `).join('');
-        }
-
-        function renderCharts() {
-            // Grafico Macro Aree Asset Allocation
-            const ctxMacro = document.getElementById('macroChart').getContext('2d');
-            new Chart(ctxMacro, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Obbligazioni Stato (BTP/EIB)', 'Obbligazioni Corp & Green', 'PAC Azionario Globale', 'PAC Settoriali (Health/Defense)', 'Commodities (Gold)'],
-                    datasets: [{
-                        data: [55, 30, 8, 5, 2],
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#eab308']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
-            });
-
-            // Grafico Scadenzario
-            const ctxMaturity = document.getElementById('maturityChart').getContext('2d');
-            new Chart(ctxMaturity, {
+            const ctx = document.getElementById('pacMacroChart').getContext('2d');
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['2029', '2030', '2031', '2034', '2036', '2037', '2042', '2048'],
+                    labels: ['Azionario Globale', 'Obbligazionario ETF', 'Settoriali & Emergenti', 'Gold & Materie Prime'],
                     datasets: [{
-                        label: 'Capitale Obbligazionario in Scadenza (€)',
-                        data: [17000, 20000, 10000, 20000, 10000, 29000, 10000, 30000],
-                        backgroundColor: '#3b82f6'
+                        label: 'Valore Investito PAC (€)',
+                        data: [12450, 8210, 5882, 4000],
+                        backgroundColor: ['#2563eb', '#10b981', '#9333ea', '#f59e0b'],
+                        borderRadius: 8
                     }]
                 },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }, 
-                    plugins: { legend: { labels: { color: '#94a3b8' } } } 
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b' } },
+                        x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                    }
                 }
             });
-        }
+        });
     </script>
 </body>
 </html>
