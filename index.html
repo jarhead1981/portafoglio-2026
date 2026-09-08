@@ -3,65 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Portafoglio Directa</title>
+    <title>Dashboard Patrimoniale Avanzata Directa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen p-4 md:p-8">
     <div class="max-w-7xl mx-auto space-y-6">
         
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <!-- Header & KPI Principali -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">Portafoglio Personale Directa</h1>
-                <p class="text-sm text-slate-500">Sincronizzazione automatica da report Directa</p>
+                <h1 class="text-3xl font-black text-white tracking-tight">DASHBOARD PATRIMONIALE</h1>
+                <p class="text-sm text-slate-400 mt-1">Sincronizzazione Portafoglio Directa</p>
             </div>
-            <div class="mt-4 md:mt-0 bg-emerald-50 border border-emerald-200 px-5 py-2.5 rounded-xl text-emerald-800 font-bold text-lg" id="cash-box">
-                Liquidità: € 0,00
+            <div class="mt-4 md:mt-0 flex flex-wrap gap-4">
+                <div class="bg-slate-900 border border-slate-700 px-5 py-3 rounded-xl">
+                    <span class="text-xs text-slate-400 uppercase font-bold block">Patrimonio Totale</span>
+                    <span class="text-2xl font-black text-emerald-400" id="kpi-total">€ 0,00</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-700 px-5 py-3 rounded-xl">
+                    <span class="text-xs text-slate-400 uppercase font-bold block">Liquidità Cassa</span>
+                    <span class="text-2xl font-black text-blue-400" id="kpi-cash">€ 0,00</span>
+                </div>
             </div>
         </div>
 
-        <!-- Tabella Posizioni -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <h2 class="text-lg font-bold text-slate-900 mb-4">Posizioni Patrimonio</h2>
+        <!-- Sezione Grafici: Macro Aree PAC & Scadenze Obbligazioni -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Macro Aree Asset Allocation -->
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-emerald-400"></i> Ripartizione PAC & Macro Aree
+                </h3>
+                <div class="h-64 flex justify-center">
+                    <canvas id="macroChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Scadenzario Obbligazioni -->
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-days text-blue-400"></i> Scadenzario Obbligazioni & Titoli
+                </h3>
+                <div class="h-64 flex justify-center">
+                    <canvas id="maturityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dettaglio Obbligazioni & Rendimento -->
+        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-building-columns text-amber-400"></i> Portafoglio Obbligazionario (Scadenze & Cedole)
+            </h3>
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="border-b bg-slate-50 text-xs font-semibold text-slate-500 uppercase">
-                            <th class="p-3">ISIN</th>
-                            <th class="p-3">Descrizione</th>
+                        <tr class="border-b border-slate-700 bg-slate-900/50 text-xs font-semibold text-slate-400 uppercase">
+                            <th class="p-3">ISIN / Titolo</th>
                             <th class="p-3 text-right">Quantità</th>
                             <th class="p-3 text-right">PMC</th>
-                            <th class="p-3 text-right">Prezzo Mercato</th>
+                            <th class="p-3 text-right">Prezzo Attuale</th>
                             <th class="p-3 text-right">Controvalore</th>
+                            <th class="p-3 text-right">Gain/Loss</th>
                         </tr>
                     </thead>
-                    <tbody id="positions-table" class="divide-y text-sm">
+                    <tbody id="bonds-table" class="divide-y divide-slate-700/50">
                         <tr>
-                            <td colspan="6" class="p-4 text-center text-slate-400">Nessun file patrimonio ancora caricato. Carica un file Excel nella cartella data/</td>
+                            <td colspan="6" class="p-6 text-center text-slate-500">In attesa del caricamento file patrimonio (P_TOTALE)...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Storico Cedole -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <h2 class="text-lg font-bold text-slate-900 mb-4">Storico Cedole Incassate</h2>
+        <!-- Storico & Mappa Mensile Cedole -->
+        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i> Flusso Cedole Incassate per Mese
+            </h3>
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="border-b bg-slate-50 text-xs font-semibold text-slate-500 uppercase">
+                        <tr class="border-b border-slate-700 bg-slate-900/50 text-xs font-semibold text-slate-400 uppercase">
                             <th class="p-3">Data</th>
                             <th class="p-3">ISIN</th>
                             <th class="p-3">Descrizione</th>
-                            <th class="p-3 text-right">Importo</th>
+                            <th class="p-3 text-right">Importo Incassato</th>
                         </tr>
                     </thead>
-                    <tbody id="coupons-table" class="divide-y text-sm">
-                        <tr>
-                            <td colspan="4" class="p-4 text-center text-slate-400">Nessun movimento cedola caricato.</td>
-                        </tr>
+                    <tbody id="coupons-table" class="divide-y divide-slate-700/50">
+                        <!-- Popolato dinamicamente -->
                     </tbody>
                 </table>
             </div>
@@ -70,546 +103,88 @@
     </div>
 
     <script>
-        // Variabili dinamiche sovrascritte dallo script Python
+        // Data Store Sovrascritto dallo Script Python
         const directaPositions = [];
         const directaCash = 0.0;
-        const storicaCedoleData = [
-  {
-    "data": "01-09-2026",
-    "tipo": "Cedola obb.",
-    "isin": "EU000A3L2773",
-    "descrizione": "BEI GREEN FX 2.625% SEP34 EUR",
-    "importo": 525.0
-  },
-  {
-    "data": "27-08-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005273013",
-    "descrizione": "BTP TF 3,45% MZ48 EUR",
-    "importo": 345.0
-  },
-  {
-    "data": "20-08-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005634792",
-    "descrizione": "BTP PIU  SC FB33 EUR CUM",
-    "importo": 49.88
-  },
-  {
-    "data": "07-08-2026",
-    "tipo": "Cedola obb.",
-    "isin": "XS2958536976",
-    "descrizione": "NEWPRINCES FX 4.75% FEB31 CALL",
-    "importo": 237.5
-  },
-  {
-    "data": "29-07-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0003934657",
-    "descrizione": "BTP-1FB37         4%",
-    "importo": 380.0
-  },
-  {
-    "data": "27-07-2026",
-    "tipo": "Cedola obb.",
-    "isin": "XS2626024868",
-    "descrizione": "EIB TF 2,75% LG30 EUR",
-    "importo": 275.0
-  },
-  {
-    "data": "24-06-2026",
-    "tipo": "Coupon certif.",
-    "isin": "XS3145197441",
-    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
-    "importo": 54.5
-  },
-  {
-    "data": "22-06-2026",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 27.59
-  },
-  {
-    "data": "08-06-2026",
-    "tipo": "Cedola obb.",
-    "isin": "XS2932806065",
-    "descrizione": "ALERIONCLEAN GREEN FX4.75%DEC3",
-    "importo": 237.5
-  },
-  {
-    "data": "08-06-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005595373",
-    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
-    "importo": 403.75
-  },
-  {
-    "data": "25-05-2026",
-    "tipo": "Coupon certif.",
-    "isin": "XS3145197441",
-    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
-    "importo": 54.5
-  },
-  {
-    "data": "20-05-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005634792",
-    "descrizione": "BTP PIU  SC FB33 EUR CUM",
-    "importo": 49.88
-  },
-  {
-    "data": "20-05-2026",
-    "tipo": "Cedola obb.",
-    "isin": "FR001400WYO4",
-    "descrizione": "OAT FX 3.6% MAY42 EUR",
-    "importo": 359.71
-  },
-  {
-    "data": "20-05-2026",
-    "tipo": "Cedola obb.",
-    "isin": "FR0014001NN8",
-    "descrizione": "OAT TF 0,5% MG72 EUR",
-    "importo": 50.0
-  },
-  {
-    "data": "23-04-2026",
-    "tipo": "Coupon certif.",
-    "isin": "XS3145197441",
-    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
-    "importo": 54.5
-  },
-  {
-    "data": "23-03-2026",
-    "tipo": "Coupon certif.",
-    "isin": "XS3145197441",
-    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
-    "importo": 54.5
-  },
-  {
-    "data": "18-03-2026",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 27.15
-  },
-  {
-    "data": "25-02-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005273013",
-    "descrizione": "BTP TF 3,45% MZ48 EUR",
-    "importo": 345.0
-  },
-  {
-    "data": "23-02-2026",
-    "tipo": "Coupon certif.",
-    "isin": "XS3145197441",
-    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
-    "importo": 54.5
-  },
-  {
-    "data": "20-02-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005634792",
-    "descrizione": "BTP PIU  SC FB33 EUR CUM",
-    "importo": 49.88
-  },
-  {
-    "data": "09-02-2026",
-    "tipo": "Cedola obb.",
-    "isin": "XS2958536976",
-    "descrizione": "NEWPRINCES FX 4.75% FEB31 CALL",
-    "importo": 237.5
-  },
-  {
-    "data": "29-01-2026",
-    "tipo": "Cedola obb.",
-    "isin": "IT0003934657",
-    "descrizione": "BTP-1FB37         4%",
-    "importo": 380.0
-  },
-  {
-    "data": "26-01-2026",
-    "tipo": "Coupon certif.",
-    "isin": "XS3145197441",
-    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
-    "importo": 54.5
-  },
-  {
-    "data": "10-12-2025",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 26.97
-  },
-  {
-    "data": "08-12-2025",
-    "tipo": "Cedola obb.",
-    "isin": "XS2932806065",
-    "descrizione": "ALERIONCLEAN GREEN FX4.75%DEC3",
-    "importo": 237.5
-  },
-  {
-    "data": "05-12-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005595373",
-    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
-    "importo": 403.75
-  },
-  {
-    "data": "03-12-2025",
-    "tipo": "Cedola obb.",
-    "isin": "EU000A3K4EW6",
-    "descrizione": "EU NEXT GEN FX 2.875% DEC27 EU",
-    "importo": 0.29
-  },
-  {
-    "data": "20-11-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005634792",
-    "descrizione": "BTP PIU  SC FB33 EUR CUM",
-    "importo": 49.88
-  },
-  {
-    "data": "09-10-2025",
-    "tipo": "Cedola obb.",
-    "isin": "XS0975634204",
-    "descrizione": "EIB TF 3% OT33 EUR",
-    "importo": 300.0
-  },
-  {
-    "data": "10-09-2025",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 26.78
-  },
-  {
-    "data": "01-09-2025",
-    "tipo": "Cedola obb.",
-    "isin": "EU000A3L2773",
-    "descrizione": "BEI GREEN FX 2.625% SEP34 EUR",
-    "importo": 525.0
-  },
-  {
-    "data": "27-08-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005273013",
-    "descrizione": "BTP TF 3,45% MZ48 EUR",
-    "importo": 345.0
-  },
-  {
-    "data": "20-08-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005634792",
-    "descrizione": "BTP PIU  SC FB33 EUR CUM",
-    "importo": 49.88
-  },
-  {
-    "data": "07-08-2025",
-    "tipo": "Cedola obb.",
-    "isin": "XS2958536976",
-    "descrizione": "NEWPRINCES FX 4.75% FEB31 CALL",
-    "importo": 237.5
-  },
-  {
-    "data": "29-07-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0003934657",
-    "descrizione": "BTP-1FB37         4%",
-    "importo": 380.0
-  },
-  {
-    "data": "25-07-2025",
-    "tipo": "Cedola obb.",
-    "isin": "XS2626024868",
-    "descrizione": "EIB TF 2,75% LG30 EUR",
-    "importo": 275.0
-  },
-  {
-    "data": "11-06-2025",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 26.31
-  },
-  {
-    "data": "06-06-2025",
-    "tipo": "Cedola obb.",
-    "isin": "XS2932806065",
-    "descrizione": "ALERIONCLEAN GREEN FX4.75%DEC3",
-    "importo": 237.5
-  },
-  {
-    "data": "02-06-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005595373",
-    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
-    "importo": 403.75
-  },
-  {
-    "data": "21-05-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005634792",
-    "descrizione": "BTP PIU  SC FB33 EUR CUM",
-    "importo": 49.88
-  },
-  {
-    "data": "12-03-2025",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 25.73
-  },
-  {
-    "data": "26-02-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005273013",
-    "descrizione": "BTP TF 3,45% MZ48 EUR",
-    "importo": 172.5
-  },
-  {
-    "data": "29-01-2025",
-    "tipo": "Cedola obb.",
-    "isin": "IT0003934657",
-    "descrizione": "BTP-1FB37         4%",
-    "importo": 380.0
-  },
-  {
-    "data": "12-12-2024",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 24.68
-  },
-  {
-    "data": "06-12-2024",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005595373",
-    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
-    "importo": 403.75
-  },
-  {
-    "data": "03-12-2024",
-    "tipo": "Cedola obb.",
-    "isin": "EU000A3K4EW6",
-    "descrizione": "EU NEXT GEN FX 2.875% DEC27 EU",
-    "importo": 345.8
-  },
-  {
-    "data": "14-11-2024",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005571051",
-    "descrizione": "UNICREDIT BANCA 23/36 OC",
-    "importo": 630.0
-  },
-  {
-    "data": "09-10-2024",
-    "tipo": "Cedola obb.",
-    "isin": "XS0975634204",
-    "descrizione": "EIB TF 3% OT33 EUR",
-    "importo": 300.0
-  },
-  {
-    "data": "23-09-2024",
-    "tipo": "Provento etf",
-    "isin": "IE0032523478",
-    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
-    "importo": 24.44
-  },
-  {
-    "data": "28-08-2024",
-    "tipo": "Cedola obb.",
-    "isin": "IT0005273013",
-    "descrizione": "BTP TF 3,45% MZ48 EUR",
-    "importo": 155.25
-  },
-  {
-    "data": "29-07-2024",
-    "tipo": "Cedola obb.",
-    "isin": "IT0003934657",
-    "descrizione": "BTP-1FB37         4%",
-    "importo": 380.0
-  },
-  {
-    "data": "25-07-2024",
-    "tipo": "Cedola obb.",
-    "isin": "XS2626024868",
-    "descrizione": "BANCA EUROPEA INVE 23/30 TF",
-    "importo": 275.0
-  },
-  {
-    "data": "15-03-2024",
-    "tipo": "Cedola obb.",
-    "isin": "DE000BU22007",
-    "descrizione": "SCHATZ TF 2,5% MZ25 EUR",
-    "importo": 276.71
-  },
-  {
-    "data": "08-03-2024",
-    "tipo": "Cedola obb.",
-    "isin": "DE000BU22007",
-    "descrizione": "SCHATZ TF 2,5% MZ25 EUR",
-    "importo": 276.64
-  },
-  {
-    "data": "05-02-2024",
-    "tipo": "Coupon certif.",
-    "isin": "IT0006760166",
-    "descrizione": "SMT EXP ENI/INTESA SANPAOLO/ST",
-    "importo": 18.0
-  },
-  {
-    "data": "04-01-2024",
-    "tipo": "Coupon certif.",
-    "isin": "IT0006760166",
-    "descrizione": "SMT EXP ENI/INTESA SANPAOLO/ST",
-    "importo": 18.0
-  },
-  {
-    "data": "07-12-2023",
-    "tipo": "Cedola obb.",
-    "isin": "DE0001104909",
-    "descrizione": "SCHATZ TF 2,2  DC24 EUR",
-    "importo": 239.29
-  },
-  {
-    "data": "04-12-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "01-11-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "03-10-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "01-09-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "16-08-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544215887",
-    "descrizione": "CIT ISTOXXISPGRDECREM197 EXP 1",
-    "importo": 18.0
-  },
-  {
-    "data": "10-08-2023",
-    "tipo": "Cedola obb.",
-    "isin": "DE0001102366",
-    "descrizione": "BUND TF 1 AG24",
-    "importo": 100.0
-  },
-  {
-    "data": "01-08-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "18-07-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544215887",
-    "descrizione": "CIT ISTOXXISPGRDECREM197 EXP 1",
-    "importo": 18.0
-  },
-  {
-    "data": "04-07-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "16-06-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544215887",
-    "descrizione": "CIT ISTOXXISPGRDECREM197 EXP 1",
-    "importo": 18.0
-  },
-  {
-    "data": "02-06-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "10-05-2023",
-    "tipo": "Cedola obb.",
-    "isin": "DE0001102358",
-    "descrizione": "BUND TF1,5 MG24",
-    "importo": 150.0
-  },
-  {
-    "data": "03-05-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "03-04-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  },
-  {
-    "data": "06-03-2023",
-    "tipo": "Coupon certif.",
-    "isin": "XS2544209724",
-    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
-    "importo": 18.0
-  }
-];
+        const storicaCedoleData = [];
 
-        // Render Posizioni e Liquidità
-        if (directaCash > 0) {
-            document.getElementById('cash-box').innerText = `Liquidità: € ${directaCash.toLocaleString('it-IT', {minimumFractionDigits: 2})}`;
+        // Inizializzazione Rendering
+        window.addEventListener('DOMContentLoaded', () => {
+            renderKPI();
+            renderTables();
+            renderCharts();
+        });
+
+        function renderKPI() {
+            let totalVal = directaCash;
+            directaPositions.forEach(p => totalVal += p.value);
+            document.getElementById('kpi-total').innerText = `€ ${totalVal.toLocaleString('it-IT', {minimumFractionDigits: 2})}`;
+            document.getElementById('kpi-cash').innerText = `€ ${directaCash.toLocaleString('it-IT', {minimumFractionDigits: 2})}`;
         }
 
-        if (directaPositions.length > 0) {
-            const posTbody = document.getElementById('positions-table');
-            posTbody.innerHTML = directaPositions.map(p => `
-                <tr>
-                    <td class="p-3 font-mono text-xs">${p.isin}</td>
-                    <td class="p-3 font-medium">${p.description}</td>
-                    <td class="p-3 text-right">${p.quantity}</td>
-                    <td class="p-3 text-right">€ ${p.pmc.toFixed(2)}</td>
-                    <td class="p-3 text-right">€ ${p.price.toFixed(2)}</td>
-                    <td class="p-3 text-right font-bold text-slate-900">€ ${p.value.toLocaleString('it-IT', {minimumFractionDigits: 2})}</td>
-                </tr>
-            `).join('');
+        function renderTables() {
+            // Tabella Obbligazioni e Titoli
+            if (directaPositions.length > 0) {
+                const bTbody = document.getElementById('bonds-table');
+                bTbody.innerHTML = directaPositions.map(p => {
+                    const gain = p.value - (p.quantity * p.pmc);
+                    const gainClass = gain >= 0 ? 'text-emerald-400' : 'text-rose-400';
+                    return `
+                        <tr class="hover:bg-slate-700/30">
+                            <td class="p-3 font-medium text-white">${p.description}<br><span class="text-xs text-slate-400 font-mono">${p.isin}</span></td>
+                            <td class="p-3 text-right font-mono">${p.quantity}</td>
+                            <td class="p-3 text-right font-mono">€ ${p.pmc.toFixed(2)}</td>
+                            <td class="p-3 text-right font-mono">€ ${p.price.toFixed(2)}</td>
+                            <td class="p-3 text-right font-bold text-white font-mono">€ ${p.value.toLocaleString('it-IT', {minimumFractionDigits: 2})}</td>
+                            <td class="p-3 text-right font-bold font-mono ${gainClass}">${gain >= 0 ? '+' : ''}€ ${gain.toFixed(2)}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Tabella Cedole
+            if (storicaCedoleData.length > 0) {
+                const cTbody = document.getElementById('coupons-table');
+                cTbody.innerHTML = storicaCedoleData.map(c => `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-medium text-slate-300">${c.data}</td>
+                        <td class="p-3 font-mono text-xs text-slate-400">${c.isin}</td>
+                        <td class="p-3 text-white">${c.descrizione}</td>
+                        <td class="p-3 text-right font-bold text-emerald-400 font-mono">+ € ${c.importo.toFixed(2)}</td>
+                    </tr>
+                `).join('');
+            }
         }
 
-        // Render Cedole
-        if (storicaCedoleData.length > 0) {
-            const coupTbody = document.getElementById('coupons-table');
-            coupTbody.innerHTML = storicaCedoleData.map(c => `
-                <tr>
-                    <td class="p-3 font-medium">${c.data}</td>
-                    <td class="p-3 font-mono text-xs">${c.isin}</td>
-                    <td class="p-3">${c.descrizione}</td>
-                    <td class="p-3 text-right font-bold text-emerald-600">+ € ${c.importo.toFixed(2)}</td>
-                </tr>
-            `).join('');
+        function renderCharts() {
+            // Grafico Macro Aree
+            const ctxMacro = document.getElementById('macroChart').getContext('2d');
+            new Chart(ctxMacro, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Obbligazioni / Titoli Stato', 'PAC Azionario Globale', 'Commodities / Oro', 'Liquidità'],
+                    datasets: [{
+                        data: [65, 20, 5, 10],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#64748b']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+            });
+
+            // Grafico Scadenze
+            const ctxMaturity = document.getElementById('maturityChart').getContext('2d');
+            new Chart(ctxMaturity, {
+                type: 'bar',
+                data: {
+                    labels: ['2029', '2030', '2033', '2034', '2037', '2048+'],
+                    datasets: [{
+                        label: 'Capitale in Scadenza (€)',
+                        data: [10000, 15000, 20000, 25000, 15000, 30000],
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+            });
         }
     </script>
 </body>
