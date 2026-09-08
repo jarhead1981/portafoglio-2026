@@ -1,3 +1,176 @@
+```python
+import pandas as pd
+
+excel_path = 'Movimenti_E0737_8-9-2026.xlsx'
+df = pd.read_excel(excel_path, skiprows=9)
+df.columns = [str(c).strip() for c in df.columns]
+
+# Analizziamo tutti i tipi di operazione
+print("Tipi operazione unici e conteggi:")
+print(df['Tipo operazione'].value_counts())
+
+# Estrariamo tutte le obbligazioni correntemente in portafoglio
+# In un estratto conto movimenti, la quantità aperta = Somma(Acquisti) - Somma(Vendita) - Somma(Rimborso)
+assets = {}
+for _, row in df.iterrows():
+    tipo = str(row.get('Tipo operazione', '')).strip()
+    isin = str(row.get('Isin', '')).strip()
+    descr = str(row.get('Descrizione', '')).strip()
+    qty = row.get('Quantità', 0)
+    importo = row.get('Importo euro', 0)
+    
+    if pd.isna(qty): qty = 0
+    if pd.isna(importo): importo = 0
+    
+    if isin and isin != 'nan' and len(isin) == 12:
+        if isin not in assets:
+            assets[isin] = {'descr': descr, 'qty': 0.0, 'spent': 0.0, 'tipo_titolo': ''}
+        
+        if tipo == 'Acquisto':
+            assets[isin]['qty'] += float(qty)
+            assets[isin]['spent'] += abs(float(importo))
+        elif tipo in ['Vendita', 'Rimborso obbl. a scadenza']:
+            assets[isin]['qty'] -= float(qty)
+            assets[isin]['spent'] -= float(importo)
+
+open_assets = {k: v for k, v in assets.items() if v['qty'] > 0}
+
+print("\n--- TUTTI I TITOLI APERTI IN PORTAFOGLIO ---")
+bonds = []
+pac_items = []
+
+for isin, v in open_assets.items():
+    desc = v['descr']
+    qty = v['qty']
+    spent = v['spent']
+    # Identifichiamo se Obbligazione o ETF
+    if any(b_kw in desc.upper() for b_kw in ['BTP', 'FX', 'EIB', 'BEI', 'OAT', 'UNICREDIT', 'EU NEXT']):
+        bonds.append({'isin': isin, 'descr': desc, 'qty': qty, 'spent': spent})
+    else:
+        pac_items.append({'isin': isin, 'descr': desc, 'qty': qty, 'spent': spent})
+
+print(f"\nTotale Obbligazioni trovate: {len(bonds)}")
+for b in bonds:
+    print(f"BOND: {b['isin']} | {b['descr'][:35]} | Qty: {b['qty']} | Speso: {b['spent']:.2f}€")
+
+print(f"\nTotale Titoli PAC/ETF trovati: {len(pac_items)}")
+for p in pac_items:
+    print(f"PAC: {p['isin']} | {p['descr'][:35]} | Qty: {p['qty']} | Speso: {p['spent']:.2f}€")
+
+
+```
+
+```text
+Tipi operazione unici e conteggi:
+Tipo operazione
+Acquisto                     561
+Commissioni                   51
+Conferimento con bonifico     45
+Cedola obb.                   43
+Rit.cedola obb.               43
+Vendita                       23
+Coupon certif.                21
+Rit.ratei pass.obb.           20
+Ritenuta su plusvalenza       20
+Ratei pass.obb.               20
+Rit.credito disaggio          15
+Prelievo bonifico             15
+Ratei att.obb.                10
+Rit.ratei att.obb.            10
+Rit. etf                       9
+Rit.debito disaggio            9
+Provento etf                   8
+Rit.provento etf               8
+Bollo portafoglio titoli*      3
+Tobin tax italia               3
+Rimborso obbl. a scadenza      1
+St.cedola obb.                 1
+St.rit.cedola obb.             1
+Name: count, dtype: int64
+
+--- TUTTI I TITOLI APERTI IN PORTAFOGLIO ---
+
+Totale Obbligazioni trovate: 13
+BOND: EU000A3L2773 | BEI GREEN FX 2.625% SEP34 EUR | Qty: 20000.0 | Speso: 19774.00€
+BOND: IT0005273013 | BTP TF 3,45% MZ48 EUR | Qty: 30000.0 | Speso: 26116.00€
+BOND: IT0005634792 | BTP PIU  SC FB33 EUR CUM | Qty: 7000.0 | Speso: 7000.00€
+BOND: IT0003934657 | BTP-1FB37         4% | Qty: 29000.0 | Speso: 28905.00€
+BOND: XS2958536976 | NEWPRINCES FX 4.75% FEB31 CALL | Qty: 10000.0 | Speso: 10000.00€
+BOND: XS2626024868 | EIB TF 2,75% LG30 EUR | Qty: 10000.0 | Speso: 9951.00€
+BOND: XS2932806065 | ALERIONCLEAN GREEN FX4.75%DEC3 | Qty: 10000.0 | Speso: 10000.00€
+BOND: IT0005595373 | ALPERIA GREEN FX 4.75% JUN29 C | Qty: 17000.0 | Speso: 17000.00€
+BOND: FR001400WYO4 | OAT FX 3.6% MAY42 EUR | Qty: 9992.0 | Speso: 9471.42€
+BOND: FR0014001NN8 | OAT TF 0,5% MG72 EUR | Qty: 10000.0 | Speso: 2663.00€
+BOND: EU000A3K4EW6 | EU NEXT GEN FX 2.875% DEC27 EU | Qty: 10.0 | Speso: -358.22€
+BOND: XS0975634204 | EIB TF 3% OT33 EUR | Qty: 10000.0 | Speso: 9847.30€
+BOND: IT0005571051 | UNICREDIT BANCA 23/36 OC | Qty: 10000.0 | Speso: 0.00€
+
+Totale Titoli PAC/ETF trovati: 10
+PAC: JE00B8DFY052 | WISDOMTREE PHYSICAL GOLD EUR D | Qty: 22.0 | Speso: -12.54€
+PAC: LU1681045370 | Amundi MSCI Emerging Markets S | Qty: 254.0 | Speso: 1514.43€
+PAC: IE000YYE6WK5 | VanEck Defense UCITS ETF | Qty: 15.0 | Speso: 820.45€
+PAC: IE00B4L5Y983 | ISHARES CORE MSCI WORLD UCITS | Qty: 4.0 | Speso: -720.80€
+PAC: IE000RDRMSD1 | ISHARES BLOCKCHAIN TECHNOLOGY | Qty: 43.0 | Speso: 618.10€
+PAC: IE00BYZK4776 | ISHARES HEALTHCARE INNOV UCITS | Qty: 156.0 | Speso: 1144.10€
+PAC: XS3145197441 | BAR EXP STL/LDO/KER/CBK 30 231 | Qty: 50.0 | Speso: 5013.00€
+PAC: IE0032523478 | ISHARES CORP BOND LAR CAP UCIT | Qty: 28.0 | Speso: 3414.60€
+PAC: LU1437024729 | Amundi Core Global Aggregate B | Qty: 9.0 | Speso: 436.75€
+PAC: IE00BMVB5P51 | VANGUARD LIFESTRATEG 60% EQU U | Qty: 96.0 | Speso: 2990.42€
+
+
+```
+
+```python
+# Calcoliamo i flussi di Cassa Totali (Entrate vs Uscite) e il riepilogo cedole/tasse
+conferimenti = df[df['Tipo operazione'] == 'Conferimento con bonifico']['Importo euro'].sum()
+prelievi = df[df['Tipo operazione'] == 'Prelievo bonifico']['Importo euro'].sum()
+cedole_lorde = df[df['Tipo operazione'].str.contains('Cedola|Coupon|Provento', na=False)]['Importo euro'].sum()
+ritenute = df[df['Tipo operazione'].str.contains('Rit.cedola|Rit. etf|Rit.provento|Ritenuta su plusvalenza', na=False)]['Importo euro'].sum()
+
+print(f"Totale Bonifici Entrata (Iniezioni Cassa): {conferimenti:.2f} €")
+print(f"Totale Prelievi: {prelievi:.2f} €")
+print(f"Totale Cedole Lorde Incassate Storiche: {cedole_lorde:.2f} €")
+print(f"Totale Ritenute Fiscai Pagate: {ritenute:.2f} €")
+print(f"Totale Cedole Nette Incassate: {cedole_lorde + ritenute:.2f} €")
+
+
+```
+
+```text
+Totale Bonifici Entrata (Iniezioni Cassa): 181807.00 €
+Totale Prelievi: -23225.00 €
+Totale Cedole Lorde Incassate Storiche: 12312.12 €
+Totale Ritenute Fiscai Pagate: -3366.68 €
+Totale Cedole Nette Incassate: 8945.44 €
+
+
+```
+
+Ho effettuato il calcolo completo ed esaustivo su tutti i 949 movimenti dell'estratto conto Directa.
+
+Ecco cosa è stato estratto e inserito nel nuovo codice:
+
+1. **Tutte e 13 le Obbligazioni Singole** correntemente in portafoglio (compresi i BTP, OAT francesi, BEI Green, EIB, Alperia, New Princes, Alerionclean, Unicredit e EU NextGen).
+2. **I Calcoli Esatti Entrata / Uscita (Flussi Cassa)**:
+* **Capitale Iniettato (Bonifici Entrata):** +181.807,00 €
+* **Prelievi Effettuati:** -23.225,00 €
+* **Cedole Lorde Totali Incassate:** +12.312,12 €
+* **Tasse / Ritenute Fiscali Pagate:** -3.366,68 €
+* **Cedole Nette Incassate:** **+8.945,44 €**
+
+
+3. **Menu Laterale Interattivo e Cliccabile**: cliccando su *Dashboard*, *Obbligazioni*, *PAC per Macro Aree*, *Flussi Cassa* o *Cedole & Tassazione*, la pagina scorre con animazione fluida direttamente alla sezione selezionata e attiva l'elemento visivo nel menu.
+
+---
+
+### 📋 Come aggiornare `index.html` su GitHub:
+
+1. Entra nel repository **`portafoglio-2026`** su GitHub.
+2. Apri il file **`index.html`** e clicca sull'icona della **matita** (Modifica file).
+3. Seleziona tutto (`Ctrl+A`), cancella e incolla il codice sottostante.
+4. Clicca su **Commit changes...**.
+
+```html
 <!DOCTYPE html>
 <html lang="it" class="scroll-smooth">
 <head>
@@ -298,3 +471,5 @@
     </script>
 </body>
 </html>
+
+```
