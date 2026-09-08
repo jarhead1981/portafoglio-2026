@@ -73,7 +73,512 @@
         // Variabili dinamiche sovrascritte dallo script Python
         const directaPositions = [];
         const directaCash = 0.0;
-        const storicaCedoleData = [];
+        const storicaCedoleData = [
+  {
+    "data": "01-09-2026",
+    "tipo": "Cedola obb.",
+    "isin": "EU000A3L2773",
+    "descrizione": "BEI GREEN FX 2.625% SEP34 EUR",
+    "importo": 525.0
+  },
+  {
+    "data": "27-08-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005273013",
+    "descrizione": "BTP TF 3,45% MZ48 EUR",
+    "importo": 345.0
+  },
+  {
+    "data": "20-08-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005634792",
+    "descrizione": "BTP PIU  SC FB33 EUR CUM",
+    "importo": 49.88
+  },
+  {
+    "data": "07-08-2026",
+    "tipo": "Cedola obb.",
+    "isin": "XS2958536976",
+    "descrizione": "NEWPRINCES FX 4.75% FEB31 CALL",
+    "importo": 237.5
+  },
+  {
+    "data": "29-07-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0003934657",
+    "descrizione": "BTP-1FB37         4%",
+    "importo": 380.0
+  },
+  {
+    "data": "27-07-2026",
+    "tipo": "Cedola obb.",
+    "isin": "XS2626024868",
+    "descrizione": "EIB TF 2,75% LG30 EUR",
+    "importo": 275.0
+  },
+  {
+    "data": "24-06-2026",
+    "tipo": "Coupon certif.",
+    "isin": "XS3145197441",
+    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
+    "importo": 54.5
+  },
+  {
+    "data": "22-06-2026",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 27.59
+  },
+  {
+    "data": "08-06-2026",
+    "tipo": "Cedola obb.",
+    "isin": "XS2932806065",
+    "descrizione": "ALERIONCLEAN GREEN FX4.75%DEC3",
+    "importo": 237.5
+  },
+  {
+    "data": "08-06-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005595373",
+    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
+    "importo": 403.75
+  },
+  {
+    "data": "25-05-2026",
+    "tipo": "Coupon certif.",
+    "isin": "XS3145197441",
+    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
+    "importo": 54.5
+  },
+  {
+    "data": "20-05-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005634792",
+    "descrizione": "BTP PIU  SC FB33 EUR CUM",
+    "importo": 49.88
+  },
+  {
+    "data": "20-05-2026",
+    "tipo": "Cedola obb.",
+    "isin": "FR001400WYO4",
+    "descrizione": "OAT FX 3.6% MAY42 EUR",
+    "importo": 359.71
+  },
+  {
+    "data": "20-05-2026",
+    "tipo": "Cedola obb.",
+    "isin": "FR0014001NN8",
+    "descrizione": "OAT TF 0,5% MG72 EUR",
+    "importo": 50.0
+  },
+  {
+    "data": "23-04-2026",
+    "tipo": "Coupon certif.",
+    "isin": "XS3145197441",
+    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
+    "importo": 54.5
+  },
+  {
+    "data": "23-03-2026",
+    "tipo": "Coupon certif.",
+    "isin": "XS3145197441",
+    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
+    "importo": 54.5
+  },
+  {
+    "data": "18-03-2026",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 27.15
+  },
+  {
+    "data": "25-02-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005273013",
+    "descrizione": "BTP TF 3,45% MZ48 EUR",
+    "importo": 345.0
+  },
+  {
+    "data": "23-02-2026",
+    "tipo": "Coupon certif.",
+    "isin": "XS3145197441",
+    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
+    "importo": 54.5
+  },
+  {
+    "data": "20-02-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005634792",
+    "descrizione": "BTP PIU  SC FB33 EUR CUM",
+    "importo": 49.88
+  },
+  {
+    "data": "09-02-2026",
+    "tipo": "Cedola obb.",
+    "isin": "XS2958536976",
+    "descrizione": "NEWPRINCES FX 4.75% FEB31 CALL",
+    "importo": 237.5
+  },
+  {
+    "data": "29-01-2026",
+    "tipo": "Cedola obb.",
+    "isin": "IT0003934657",
+    "descrizione": "BTP-1FB37         4%",
+    "importo": 380.0
+  },
+  {
+    "data": "26-01-2026",
+    "tipo": "Coupon certif.",
+    "isin": "XS3145197441",
+    "descrizione": "BAR EXP STL/LDO/KER/CBK 30 231",
+    "importo": 54.5
+  },
+  {
+    "data": "10-12-2025",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 26.97
+  },
+  {
+    "data": "08-12-2025",
+    "tipo": "Cedola obb.",
+    "isin": "XS2932806065",
+    "descrizione": "ALERIONCLEAN GREEN FX4.75%DEC3",
+    "importo": 237.5
+  },
+  {
+    "data": "05-12-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005595373",
+    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
+    "importo": 403.75
+  },
+  {
+    "data": "03-12-2025",
+    "tipo": "Cedola obb.",
+    "isin": "EU000A3K4EW6",
+    "descrizione": "EU NEXT GEN FX 2.875% DEC27 EU",
+    "importo": 0.29
+  },
+  {
+    "data": "20-11-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005634792",
+    "descrizione": "BTP PIU  SC FB33 EUR CUM",
+    "importo": 49.88
+  },
+  {
+    "data": "09-10-2025",
+    "tipo": "Cedola obb.",
+    "isin": "XS0975634204",
+    "descrizione": "EIB TF 3% OT33 EUR",
+    "importo": 300.0
+  },
+  {
+    "data": "10-09-2025",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 26.78
+  },
+  {
+    "data": "01-09-2025",
+    "tipo": "Cedola obb.",
+    "isin": "EU000A3L2773",
+    "descrizione": "BEI GREEN FX 2.625% SEP34 EUR",
+    "importo": 525.0
+  },
+  {
+    "data": "27-08-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005273013",
+    "descrizione": "BTP TF 3,45% MZ48 EUR",
+    "importo": 345.0
+  },
+  {
+    "data": "20-08-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005634792",
+    "descrizione": "BTP PIU  SC FB33 EUR CUM",
+    "importo": 49.88
+  },
+  {
+    "data": "07-08-2025",
+    "tipo": "Cedola obb.",
+    "isin": "XS2958536976",
+    "descrizione": "NEWPRINCES FX 4.75% FEB31 CALL",
+    "importo": 237.5
+  },
+  {
+    "data": "29-07-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0003934657",
+    "descrizione": "BTP-1FB37         4%",
+    "importo": 380.0
+  },
+  {
+    "data": "25-07-2025",
+    "tipo": "Cedola obb.",
+    "isin": "XS2626024868",
+    "descrizione": "EIB TF 2,75% LG30 EUR",
+    "importo": 275.0
+  },
+  {
+    "data": "11-06-2025",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 26.31
+  },
+  {
+    "data": "06-06-2025",
+    "tipo": "Cedola obb.",
+    "isin": "XS2932806065",
+    "descrizione": "ALERIONCLEAN GREEN FX4.75%DEC3",
+    "importo": 237.5
+  },
+  {
+    "data": "02-06-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005595373",
+    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
+    "importo": 403.75
+  },
+  {
+    "data": "21-05-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005634792",
+    "descrizione": "BTP PIU  SC FB33 EUR CUM",
+    "importo": 49.88
+  },
+  {
+    "data": "12-03-2025",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 25.73
+  },
+  {
+    "data": "26-02-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005273013",
+    "descrizione": "BTP TF 3,45% MZ48 EUR",
+    "importo": 172.5
+  },
+  {
+    "data": "29-01-2025",
+    "tipo": "Cedola obb.",
+    "isin": "IT0003934657",
+    "descrizione": "BTP-1FB37         4%",
+    "importo": 380.0
+  },
+  {
+    "data": "12-12-2024",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 24.68
+  },
+  {
+    "data": "06-12-2024",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005595373",
+    "descrizione": "ALPERIA GREEN FX 4.75% JUN29 C",
+    "importo": 403.75
+  },
+  {
+    "data": "03-12-2024",
+    "tipo": "Cedola obb.",
+    "isin": "EU000A3K4EW6",
+    "descrizione": "EU NEXT GEN FX 2.875% DEC27 EU",
+    "importo": 345.8
+  },
+  {
+    "data": "14-11-2024",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005571051",
+    "descrizione": "UNICREDIT BANCA 23/36 OC",
+    "importo": 630.0
+  },
+  {
+    "data": "09-10-2024",
+    "tipo": "Cedola obb.",
+    "isin": "XS0975634204",
+    "descrizione": "EIB TF 3% OT33 EUR",
+    "importo": 300.0
+  },
+  {
+    "data": "23-09-2024",
+    "tipo": "Provento etf",
+    "isin": "IE0032523478",
+    "descrizione": "ISHARES CORP BOND LAR CAP UCIT",
+    "importo": 24.44
+  },
+  {
+    "data": "28-08-2024",
+    "tipo": "Cedola obb.",
+    "isin": "IT0005273013",
+    "descrizione": "BTP TF 3,45% MZ48 EUR",
+    "importo": 155.25
+  },
+  {
+    "data": "29-07-2024",
+    "tipo": "Cedola obb.",
+    "isin": "IT0003934657",
+    "descrizione": "BTP-1FB37         4%",
+    "importo": 380.0
+  },
+  {
+    "data": "25-07-2024",
+    "tipo": "Cedola obb.",
+    "isin": "XS2626024868",
+    "descrizione": "BANCA EUROPEA INVE 23/30 TF",
+    "importo": 275.0
+  },
+  {
+    "data": "15-03-2024",
+    "tipo": "Cedola obb.",
+    "isin": "DE000BU22007",
+    "descrizione": "SCHATZ TF 2,5% MZ25 EUR",
+    "importo": 276.71
+  },
+  {
+    "data": "08-03-2024",
+    "tipo": "Cedola obb.",
+    "isin": "DE000BU22007",
+    "descrizione": "SCHATZ TF 2,5% MZ25 EUR",
+    "importo": 276.64
+  },
+  {
+    "data": "05-02-2024",
+    "tipo": "Coupon certif.",
+    "isin": "IT0006760166",
+    "descrizione": "SMT EXP ENI/INTESA SANPAOLO/ST",
+    "importo": 18.0
+  },
+  {
+    "data": "04-01-2024",
+    "tipo": "Coupon certif.",
+    "isin": "IT0006760166",
+    "descrizione": "SMT EXP ENI/INTESA SANPAOLO/ST",
+    "importo": 18.0
+  },
+  {
+    "data": "07-12-2023",
+    "tipo": "Cedola obb.",
+    "isin": "DE0001104909",
+    "descrizione": "SCHATZ TF 2,2  DC24 EUR",
+    "importo": 239.29
+  },
+  {
+    "data": "04-12-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "01-11-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "03-10-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "01-09-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "16-08-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544215887",
+    "descrizione": "CIT ISTOXXISPGRDECREM197 EXP 1",
+    "importo": 18.0
+  },
+  {
+    "data": "10-08-2023",
+    "tipo": "Cedola obb.",
+    "isin": "DE0001102366",
+    "descrizione": "BUND TF 1 AG24",
+    "importo": 100.0
+  },
+  {
+    "data": "01-08-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "18-07-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544215887",
+    "descrizione": "CIT ISTOXXISPGRDECREM197 EXP 1",
+    "importo": 18.0
+  },
+  {
+    "data": "04-07-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "16-06-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544215887",
+    "descrizione": "CIT ISTOXXISPGRDECREM197 EXP 1",
+    "importo": 18.0
+  },
+  {
+    "data": "02-06-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "10-05-2023",
+    "tipo": "Cedola obb.",
+    "isin": "DE0001102358",
+    "descrizione": "BUND TF1,5 MG24",
+    "importo": 150.0
+  },
+  {
+    "data": "03-05-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "03-04-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  },
+  {
+    "data": "06-03-2023",
+    "tipo": "Coupon certif.",
+    "isin": "XS2544209724",
+    "descrizione": "CIT BSKISXXISP/BNP/SG/CA EXP 3",
+    "importo": 18.0
+  }
+];
 
         // Render Posizioni e Liquidità
         if (directaCash > 0) {
