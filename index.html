@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Portafoglio Directa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900">Portafoglio Personale Directa</h1>
+                <p class="text-sm text-slate-500">Sincronizzazione automatica da report Directa</p>
+            </div>
+            <div class="mt-4 md:mt-0 bg-emerald-50 border border-emerald-200 px-5 py-2.5 rounded-xl text-emerald-800 font-bold text-lg" id="cash-box">
+                Liquidità: € 0,00
+            </div>
+        </div>
+
+        <!-- Tabella Posizioni -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">Posizioni Patrimonio</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b bg-slate-50 text-xs font-semibold text-slate-500 uppercase">
+                            <th class="p-3">ISIN</th>
+                            <th class="p-3">Descrizione</th>
+                            <th class="p-3 text-right">Quantità</th>
+                            <th class="p-3 text-right">PMC</th>
+                            <th class="p-3 text-right">Prezzo Mercato</th>
+                            <th class="p-3 text-right">Controvalore</th>
+                        </tr>
+                    </thead>
+                    <tbody id="positions-table" class="divide-y text-sm">
+                        <tr>
+                            <td colspan="6" class="p-4 text-center text-slate-400">Nessun file patrimonio ancora caricato. Carica un file Excel nella cartella data/</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Storico Cedole -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">Storico Cedole Incassate</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b bg-slate-50 text-xs font-semibold text-slate-500 uppercase">
+                            <th class="p-3">Data</th>
+                            <th class="p-3">ISIN</th>
+                            <th class="p-3">Descrizione</th>
+                            <th class="p-3 text-right">Importo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coupons-table" class="divide-y text-sm">
+                        <tr>
+                            <td colspan="4" class="p-4 text-center text-slate-400">Nessun movimento cedola caricato.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Variabili dinamiche sovrascritte dallo script Python
+        const directaPositions = [];
+        const directaCash = 0.0;
+        const storicaCedoleData = [];
+
+        // Render Posizioni e Liquidità
+        if (directaCash > 0) {
+            document.getElementById('cash-box').innerText = `Liquidità: € ${directaCash.toLocaleString('it-IT', {minimumFractionDigits: 2})}`;
+        }
+
+        if (directaPositions.length > 0) {
+            const posTbody = document.getElementById('positions-table');
+            posTbody.innerHTML = directaPositions.map(p => `
+                <tr>
+                    <td class="p-3 font-mono text-xs">${p.isin}</td>
+                    <td class="p-3 font-medium">${p.description}</td>
+                    <td class="p-3 text-right">${p.quantity}</td>
+                    <td class="p-3 text-right">€ ${p.pmc.toFixed(2)}</td>
+                    <td class="p-3 text-right">€ ${p.price.toFixed(2)}</td>
+                    <td class="p-3 text-right font-bold text-slate-900">€ ${p.value.toLocaleString('it-IT', {minimumFractionDigits: 2})}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Render Cedole
+        if (storicaCedoleData.length > 0) {
+            const coupTbody = document.getElementById('coupons-table');
+            coupTbody.innerHTML = storicaCedoleData.map(c => `
+                <tr>
+                    <td class="p-3 font-medium">${c.data}</td>
+                    <td class="p-3 font-mono text-xs">${c.isin}</td>
+                    <td class="p-3">${c.descrizione}</td>
+                    <td class="p-3 text-right font-bold text-emerald-600">+ € ${c.importo.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
