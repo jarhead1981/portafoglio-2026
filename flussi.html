@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flussi & Compravendite | Directa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 text-slate-700 font-sans min-h-screen flex">
+
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col min-h-screen shrink-0 hidden md:flex sticky top-0 h-screen">
+        <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-blue-600 text-white p-2.5 rounded-xl flex items-center justify-center font-black">
+                <i class="fa-solid fa-chart-pie text-xl"></i>
+            </div>
+            <div>
+                <span class="text-lg font-bold text-white tracking-wide block">PORTAFOGLIO</span>
+                <span class="text-xs text-slate-400">Directa E0737</span>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-1.5 text-sm font-semibold">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition">
+                <i class="fa-solid fa-border-all w-5 text-lg"></i> Dashboard Overview
+            </a>
+            <a href="obbligazioni.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition">
+                <i class="fa-solid fa-building-columns w-5 text-lg text-emerald-400"></i> Obbligazioni (13 Titoli)
+            </a>
+            <a href="pac.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition">
+                <i class="fa-solid fa-layer-group w-5 text-lg text-amber-400"></i> PAC per Macro Aree
+            </a>
+            <a href="cedole.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition">
+                <i class="fa-solid fa-receipt w-5 text-lg text-purple-400"></i> Cedole per Anno
+            </a>
+            <a href="flussi.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+                <i class="fa-solid fa-money-bill-transfer w-5 text-lg text-sky-400"></i> Flussi & Compravendite
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0">
+        <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+            <h2 class="text-xl font-bold text-slate-800">Analisi Compravendite (Differenza Acquisto vs Vendita)</h2>
+        </header>
+
+        <div class="p-6 md:p-8 space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-lg font-bold text-slate-800">Differenziale di Prezzo su Titoli Venduti / Chiusi</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-500 uppercase">
+                                <th class="p-3">Operazione</th>
+                                <th class="p-3">ISIN / Titolo</th>
+                                <th class="p-3 text-right">Totale Acquisto</th>
+                                <th class="p-3 text-right">Totale Vendita</th>
+                                <th class="p-3 text-right">Gain / Loss Realizzato</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-3 font-bold text-rose-600">Vendita / Chiusura</td>
+                                <td class="p-3 font-bold text-slate-800">EU000A3K4EW6 - EU NEXT GEN 2.875%</td>
+                                <td class="p-3 text-right font-mono">€ 9.810,00</td>
+                                <td class="p-3 text-right font-mono">€ 10.168,22</td>
+                                <td class="p-3 text-right font-mono font-bold text-emerald-600">+ € 358,22</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-emerald-600">Acquisto Recente</td>
+                                <td class="p-3 font-bold text-slate-800">IT0005273013 - BTP 3.45% MZ48</td>
+                                <td class="p-3 text-right font-mono">€ 8.314,00</td>
+                                <td class="p-3 text-right font-mono text-slate-400">In Portafoglio</td>
+                                <td class="p-3 text-right font-mono text-slate-400">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
