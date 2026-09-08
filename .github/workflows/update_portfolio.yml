@@ -1,1 +1,41 @@
+name: Auto-Update Portafoglio Directa
 
+on:
+  push:
+    paths:
+      - 'data/*.xlsx'
+      - 'dati/*.xlsx'
+      - '*.xlsx'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-portfolio:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout codice repository
+        uses: actions/checkout@v4
+
+      - name: Imposta ambiente Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Installa librerie
+        run: |
+          pip install pandas openpyxl
+
+      - name: Esegui script aggiornamento
+        run: |
+          python scripts/update_dashboard.py
+
+      - name: Commit e Pubblicazione Modifiche
+        run: |
+          git config --global user.name "Enrico Portfolio Bot"
+          git config --global user.email "bot@github.com"
+          git add index.html
+          git commit -m "🤖 Aggiornamento automatico dashboard da report Directa" || exit 0
+          git push
